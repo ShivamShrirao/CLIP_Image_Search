@@ -38,6 +38,15 @@ def search_query(inp_query, embedding_db, cpu=False):
 		text = text.to(device)
 	with torch.no_grad():
 		text_features = model.encode_text(text)
+	# normalization as done in CLIP
+    # image_features = image_features / image_features.norm(dim=-1, keepdim=True)	# pre do it
+    # text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+
+    # # cosine similarity as logits
+    # logit_scale = self.logit_scale.exp()
+    # logits_per_iamge = logit_scale * image_features @ text_features.t()
+    # logits_per_text = logit_scale * text_features @ image_features.t()
+
 	hits = util.semantic_search(text_features, embedding_db)
 	return hits[0]
 

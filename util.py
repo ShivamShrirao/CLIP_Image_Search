@@ -40,16 +40,6 @@ def semantic_search(query_embeddings: Tensor,
     query_embeddings = torch.nn.functional.normalize(query_embeddings, p=2, dim=1)
     corpus_embeddings = torch.nn.functional.normalize(corpus_embeddings, p=2, dim=1)
 
-    # normalization as done in CLIP
-    # image_features = image_features / image_features.norm(dim=-1, keepdim=True)
-    # text_features = text_features / text_features.norm(dim=-1, keepdim=True)
-
-    # # cosine similarity as logits
-    # logit_scale = self.logit_scale.exp()
-    # logits_per_iamge = logit_scale * image_features @ text_features.t()
-    # logits_per_text = logit_scale * text_features @ image_features.t()
-
-
     if corpus_embeddings.device != query_embeddings.device:
         corpus_embeddings = corpus_embeddings.to(query_embeddings.device)
 
