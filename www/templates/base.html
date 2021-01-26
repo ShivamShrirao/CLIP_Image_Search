@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Quora questions search</title>
+    <script src="{{ url_for('static', filename='js/jquery.min.js')}}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/w3.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css')}}">
+  </head>
+  <body class="w3-theme">
+    <div id="nav-icon1" onclick="togNav()" style="top:0; position: fixed;">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" onclick="togNav()" style="text-align: right;" id="closetxt">
+                Close
+        </a><br>
+        <img class="w3-circle center-block" src="{{ url_for('static', filename='images/user.png')}}" height="150" width="150" style="background:white;">
+        {% if not request %}
+            <a href="#" >{{request}}</a>
+            <a href="#" >About</a>
+            <a href="#" >Contact</a>
+        {% else %}
+            <a href="#" >Login</a>
+            <a href="#" >Register</a>
+        {% endif %}
+    </div>
+    <script>
+      function togNav() {
+        $('#nav-icon1').toggleClass('open');
+        $('#mySidebar').toggleClass('open');
+        $('#main').toggleClass('open');
+        $('#navBarid').toggleClass('open');
+        $('#closetxt').toggleClass('open');
+      }
+    </script>
+    <div id="main">
+      <nav class="navbar navbar-inverse" id="navBarid" style="position: fixed; top: 0; width: 100%">
+        <div class="container-fluid">
+            <!--items-->
+            <div class="collapse navbar-collapse" id="topNavBar">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="/">
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp; Home
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="/">
+                            <span class="glyphicon glyphicon-grain" aria-hidden="true"></span>&nbsp; Search questions
+                        </a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if not request %}
+                        <li class="">
+                            <a href="#">
+                                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; {{request}}
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="#">
+                                <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp; Logout
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="">
+                            <a href="#">
+                                <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp; Login
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+      </nav>
+      {% if messages %}
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+          {% for message in messages %}
+              <script>M.toast({html: '{{message}}', classes: 'rounded', displayLength: 5000});</script>
+          {% endfor %}
+      {% endif %}
+      <div class="w3-row-padding w3-stretch w3-padding w3-margin" style="margin-top: 45px!important">
+        {% block content %}
+            <h1>Welcome to Quora Questions Search.</h1>
+        {% endblock %}
+      </div>
+    </div>
+  </body>
+</html>

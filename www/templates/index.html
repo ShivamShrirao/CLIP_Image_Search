@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<style type="text/css">
+      .ui-autocomplete-row
+      {
+        padding:8px;
+        background-color: #f4f4f4;
+        border-bottom:1px solid #ccc;
+        font-weight:bold;
+      }
+      .ui-autocomplete-row:hover
+      {
+        background-color: #ddd;
+      }
+    </style>
+	<h1><b>Welcome to CLIP Image Search</b></h1>
+	<form method="get" action="/search">
+		<div>
+	    	<input id="searchfield" placeholder="Search Images" type="text" name="q" autofocus autocomplete="off" class="form-control input-lg" style="width: 90%; border: 1px solid #71717152">
+	  	</div>
+	</form>
+{% endblock %}
