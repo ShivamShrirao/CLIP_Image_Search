@@ -3,7 +3,7 @@ import torch
 import numpy as np
 
 
-## Taken from https://github.com/UKPLab/sentence-transformers/blob/master/sentence_transformers/util.py
+## Taken from https://github.com/UKPLab/sentence-transformers/blob/master/sentence_transformers/util.py and modified a bit
 
 
 def semantic_search(query_embeddings: Tensor,
@@ -39,6 +39,15 @@ def semantic_search(query_embeddings: Tensor,
     #Normalize scores, so that the dot-product is equivalent to cosine similarity
     query_embeddings = torch.nn.functional.normalize(query_embeddings, p=2, dim=1)
     corpus_embeddings = torch.nn.functional.normalize(corpus_embeddings, p=2, dim=1)
+
+    # normalization as done in CLIP
+    # image_features = image_features / image_features.norm(dim=-1, keepdim=True)
+    # text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+
+    # # cosine similarity as logits
+    # logit_scale = self.logit_scale.exp()
+    # logits_per_iamge = logit_scale * image_features @ text_features.t()
+    # logits_per_text = logit_scale * text_features @ image_features.t()
 
 
     if corpus_embeddings.device != query_embeddings.device:
