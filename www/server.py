@@ -81,22 +81,6 @@ def search():
 	time_taken = end_time-start_time
 	return render_template("search.html", resp=resp, query=query, time_taken=f"{time_taken:.4f}")
 
-
-@app.route('/view/<qid>')
-def view(qid, view_page=True):
-	start_time = time.time()
-	try:
-		query = corpus_sentences[int(qid)]
-		resp = get_resp_dicts(query)
-	except IndexError:
-		query = ""
-		resp = []
-	end_time = time.time()
-	time_taken = end_time-start_time
-	return render_template("search.html", resp=resp[1:], query=query, time_taken=f"{time_taken:.4f}",
-							view_page=view_page)	 # skip first resp as it is same as question in db.
-
-
 	
 if __name__ == '__main__':
 	app.run(debug=False)
