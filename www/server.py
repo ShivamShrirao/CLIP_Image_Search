@@ -6,24 +6,38 @@ import numpy as np
 import json
 import time
 import sys
+import csv
+import pickle
 
 CLIP_DIR = "../CLIP"
-DATASET_DIR = "../some-image-dataset/"
+DATASET_DIR = "../unsplash-image-dataset/"
 
-sys.path.append(".")
-import util
 sys.path.append(CLIP_DIR)
 import clip
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 start_time = time.time()
-# image_embeddings = torch.load(DATASET_DIR+'image_embeddings.pt').to(device)
-print(f"[+] Loaded image_embeddings.\t({time.time()-start_time:.3f}s)")
+images_embeddings = torch.load(DATASET_DIR+'images_embeddings.pt').to(device)
+print(f"[+] Loaded images_embeddings.\t({time.time()-start_time:.3f}s)")
 
 start_time = time.time()
 model, preprocess = clip.load("ViT-B/32", device=device)
 print(f"[+] Loaded model.\t\t({time.time()-start_time:.3f}s)")
+
+with open(DATASET_DIR+'photo_ids.list', 'rb') as fp:
+    photo_ids = pickle.load(fp)
+
+photo_urls = []
+with open(DATASET_DIR+"photos.tsv000") as fIn:
+    reader = csv.DictReader(fIn, delimiter='\t')
+    for row in reader:
+        photo_urls.append([row['photo_id'], row['photo_image_url']])
+
+id_url_dict = {}
+def assign(x):
+    id_url_dict[x[0]]=x[1]
+ret = list(map(assign, photo_urls))
 
 
 app = Flask(__name__)
@@ -32,38 +46,30 @@ app = Flask(__name__)
 def index():
 	return render_template("index.html")
 
-def search_query(inp_query, embedding_db, cpu=False):
+def search_query(inp_query, embedding_db, cpu=False, top_k=20):
 	text = clip.tokenize([inp_query])
 	if not cpu:
 		text = text.to(device)
 	with torch.no_grad():
 		text_features = model.encode_text(text)
-	# normalization as done in CLIP
-    # image_features = image_features / image_features.norm(dim=-1, keepdim=True)	# pre do it
-    # text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+		text_features /= text_features.norm(dim=-1, keepdim=True)
+		# cosine similarity as logits
+		logits_per_image = (images_embeddings @ text_features.t()).squeeze()
+		logits_per_image = logits_per_image.cpu().numpy()
+		best_img_idx = np.argsort(logits_per_image)[::-1]
+	return best_img_idx[:top_k]
 
-    # # cosine similarity as logits
-    # logit_scale = self.logit_scale.exp()
-    # logits_per_iamge = logit_scale * image_features @ text_features.t()
-    # logits_per_text = logit_scale * text_features @ image_features.t()
-
-	hits = util.semantic_search(text_features, embedding_db)
-	return hits[0]
-
-cache_hits = {}
-# TODO: Limit cache_hits size.
+cache_img_idx = {}
+# TODO: Limit cache_img_idx size.
 def get_resp_dicts(query):
 	resp = []
-	hits = cache_hits.get(query)
-	if hits is None:
-		hits = search_query(query, image_embeddings)
-		cache_hits[query] = hits
-	for hit in hits:
-		resp.append({
-				"value": corpus_sentences[hit['corpus_id']],
-				"score": f"{hit['score']:.3f}",
-				"url": url_for('view', qid=hit['corpus_id'])
-				})
+	best_img_idx = cache_img_idx.get(query)
+	if best_img_idx is None:
+		best_img_idx = search_query(query, images_embeddings)
+		cache_img_idx[query] = best_img_idx
+	for idx in best_img_idx:
+		im_id = photo_ids[idx]
+		resp.append({"id": im_id, "url": id_url_dict[im_id]})
 	return resp
 
 @app.route('/search')

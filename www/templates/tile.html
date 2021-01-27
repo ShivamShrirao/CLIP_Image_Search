@@ -1,10 +1,5 @@
-	<div class="">
-		<a href="{{hitobj.url}}">
-			<b style="display: inline;">{{ hitobj.value }}</b>
+	<div class="imageContainer">
+		<a href="{{hitobj.url}}" target="_blank" rel="noopener noreferrer">
+			<img src="{{hitobj.url + '?w=480'}}">
 		</a>
-		{% if hitobj.score %}
-			({{hitobj.score}})
-		{% endif %}
-		<br>
-		
 	</div>
