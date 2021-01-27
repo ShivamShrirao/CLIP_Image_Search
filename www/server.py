@@ -47,11 +47,9 @@ def index():
 	return render_template("index.html")
 
 def search_query(inp_query, embedding_db, cpu=False, top_k=20):
-	text = clip.tokenize([inp_query])
-	if not cpu:
-		text = text.to(device)
+	text = clip.tokenize([inp_query]).to(device)
 	with torch.no_grad():
-		text_features = model.encode_text(text)
+		text_features = model.encode_text(text)#.to(torch.half)
 		text_features /= text_features.norm(dim=-1, keepdim=True)
 		# cosine similarity as logits
 		logits_per_image = (images_embeddings @ text_features.t()).squeeze()

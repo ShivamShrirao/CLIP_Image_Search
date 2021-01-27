@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Quora questions search</title>
+    <title>CLIP Images search</title>
     <script src="{{ url_for('static', filename='js/jquery.min.js')}}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css')}}" />
@@ -50,7 +50,7 @@
                     </li>
                     <li class="active">
                         <a href="/">
-                            <span class="glyphicon glyphicon-grain" aria-hidden="true"></span>&nbsp; Search questions
+                            <span class="glyphicon glyphicon-grain" aria-hidden="true"></span>&nbsp; Search Images
                         </a>
                     </li>
                 </ul>
@@ -85,7 +85,7 @@
       {% endif %}
       <div class="w3-row-padding w3-stretch w3-padding w3-margin" style="margin-top: 45px!important">
         {% block content %}
-            <h1>Welcome to Quora Questions Search.</h1>
+            <h1>Welcome to CLIP Images Search.</h1>
         {% endblock %}
       </div>
     </div>
