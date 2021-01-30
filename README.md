@@ -1,8 +1,8 @@
 # CLIP_Image_Search
 
-![woods](/pics/woods.png)
-![girl_flowers](/pics/girl_flowers.png)
 ![flamingo](/pics/flamingo.png)
+![girl_flowers](/pics/girl_flowers.png)
+![woods](/pics/woods.png)
 ![city](/pics/city.png)
 ![mountain](/pics/mountain.png)
 ![beach](/pics/beach.png)
