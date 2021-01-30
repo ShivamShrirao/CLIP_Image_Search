@@ -14,7 +14,7 @@
 	<br>
 	<form method="get" action="/search">
 		<div>
-	    	<input id="searchfield" placeholder="Describe the Image" type="text" name="q" autofocus autocomplete="off" class="form-control input-lg" onfocus="this.value='{{query}}'; this.onfocus=null;" style="width: 90%; border: 1px solid #71717152">
+	    	<input id="searchfield" placeholder="Describe the Image" type="text" name="q" autocomplete="off" class="form-control input-lg" value="{{query}}" style="width: 90%; border: 1px solid #71717152">
 	  	</div>
 	</form>
 	<h1><b style="color: black">{{query}}</b></h1> ({{time_taken}} seconds)
