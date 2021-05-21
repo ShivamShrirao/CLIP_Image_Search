@@ -10,7 +10,7 @@ import csv
 import pickle
 
 CLIP_DIR = "../CLIP"
-DATASET_DIR = "../unsplash-image-dataset/"
+DATASET_DIR = "../datasets/unsplash-image-dataset/"
 
 sys.path.append(CLIP_DIR)
 import clip
@@ -22,7 +22,7 @@ images_embeddings = torch.load(DATASET_DIR+'images_embeddings.pt').to(device)
 print(f"[+] Loaded images_embeddings.\t({time.time()-start_time:.3f}s)")
 
 start_time = time.time()
-model, preprocess = clip.load("ViT-B/32", device=device)
+model, preprocess = clip.load("ViT-B/32", device=device, jit=False)
 print(f"[+] Loaded model.\t\t({time.time()-start_time:.3f}s)")
 
 with open(DATASET_DIR+'photo_ids.list', 'rb') as fp:
