@@ -28,17 +28,11 @@ print(f"[+] Loaded model.\t\t({time.time()-start_time:.3f}s)")
 with open(DATASET_DIR+'photo_ids.list', 'rb') as fp:
     photo_ids = pickle.load(fp)
 
-photo_urls = []
+id_url_dict = {}
 with open(DATASET_DIR+"photos.tsv000") as fIn:
     reader = csv.DictReader(fIn, delimiter='\t')
     for row in reader:
-        photo_urls.append([row['photo_id'], row['photo_image_url']])
-
-id_url_dict = {}
-def assign(x):
-    id_url_dict[x[0]]=x[1]
-ret = list(map(assign, photo_urls))
-
+        id_url_dict[row['photo_id']] = row['photo_image_url']
 
 app = Flask(__name__)
 
